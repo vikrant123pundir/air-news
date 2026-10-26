@@ -1,0 +1,30 @@
+name: Fetch AIR bulletins
+
+on:
+  schedule:
+    # UTC. Two tries after each bulletin (IST = UTC+5:30): ~9:30 and ~11:00 IST, ~22:00 and ~23:30 IST
+    - cron: "0 4 * * *"
+    - cron: "30 5 * * *"
+    - cron: "30 16 * * *"
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch bulletins
+        run: python fetch_bulletins.py
+      - name: Commit if changed
+        run: |
+          git config user.name "bulletin-bot"
+          git config user.email "bulletin-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || (git commit -m "Update bulletins" && git push)
