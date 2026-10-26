@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Lexical Precision Dictator - V61</title>
+    <title>Lexical Precision Dictator - V63</title>
     <style>
         :root { --grey: #94a3b8; --accent: #3b82f6; --bg: #050505; --card: #121212; --text: #fafafa; --yellow: #fbbf24; --red: #ef4444; --green: #10b981; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -58,21 +58,12 @@
         .led-legend { display: none; position: absolute; top: 20px; right: -6px; width: min(380px, 86vw); padding-top: 8px; text-align: left; cursor: default; z-index: 400; }
         .led-slot:hover .led-legend, .led-slot.pin .led-legend { display: block; }
         .lg-card { position: relative; background: #0c0c0c; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px 16px 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.8); }
-        .lg-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; color: #9ca3af; margin-bottom: 8px; }
-        .lg-rail { position: absolute; left: 26px; top: 46px; bottom: 28px; width: 1px; background: #2a2a2a; }
-        .lg-row { display: flex; align-items: center; gap: 12px; padding: 7px 0; }
-        .lg-slot { position: relative; z-index: 1; flex: 0 0 20px; height: 20px; background: #0c0c0c; display: flex; align-items: center; justify-content: center; }
         .lg-dot { width: 10px; height: 10px; border-radius: 50%; box-sizing: border-box; display: block; }
         .d-off { background: #222; border: 1px solid #444; }
         .d-ready { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
         .d-speak { background: var(--accent); box-shadow: 0 0 0 4px rgba(59,130,246,0.35), 0 0 12px var(--accent); }
         .d-buf { background: var(--yellow); box-shadow: 0 0 12px var(--yellow); }
         .d-ping { background: var(--red); box-shadow: 0 0 12px var(--red); }
-        .lg-txt { display: flex; flex-direction: column; }
-        .lg-txt b { font-size: 0.8rem; font-weight: 600; color: #e5e5e5; }
-        .lg-txt span { font-size: 0.75rem; color: #9ca3af; }
-        .lg-loop { position: relative; margin: 6px -10px; padding: 0 9px; border: 1px dashed var(--accent); border-radius: 8px; }
-        .lg-loop > i { position: absolute; top: -8px; right: 12px; font-size: 0.68rem; font-style: normal; color: var(--accent); background: #0c0c0c; padding: 0 6px; }
         @keyframes pulse-glow { 0% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.4; transform: scale(0.9); } }
 
         .btns { display: flex; gap: 8px; position: relative; }
@@ -87,35 +78,13 @@
 
         .pop { display: none; position: absolute; top: calc(100% + 6px); right: 0; z-index: 300; background: #0c0c0c; border: 1px solid #2a2a2a; border-radius: 10px; padding: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.8); max-height: 75vh; overflow-y: auto; box-sizing: border-box; }
         .pop.open { display: block; }
-        #gearPop { width: min(460px, 94vw); overscroll-behavior: contain; padding: 12px; }
-        .tabs { display: flex; margin-bottom: 14px; }
-        .tabgroup { flex: 1; display: flex; gap: 4px; background: #151515; border: 1px solid #2a2a2a; border-radius: 8px; padding: 3px; }
-        .tab, .seg button, .subtabs button { padding: 8px 4px; background: transparent; color: #9a9a9a; border: 1px solid transparent; border-radius: 6px; font-size: 0.68rem; letter-spacing: 0.04em; }
-        .tab.on, .seg button.on, .subtabs button.on { color: var(--accent); border-color: var(--accent); background: rgba(59,130,246,0.14); }
-        .tabpane { display: none; flex-direction: column; gap: 14px; }
-        .tabpane.on { display: flex; }
         .sec { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8a8a; }
-        .seg { flex: 1; display: flex; gap: 4px; background: #151515; border: 1px solid #2a2a2a; border-radius: 8px; padding: 3px; }
-        .sw { flex: 0 0 auto; height: 40px; display: flex; align-items: center; justify-content: center; gap: 4px; background: #151515; border: 1px solid #2a2a2a; padding: 0 12px; }
-        .sw.on { border-color: var(--accent); background: rgba(59,130,246,0.12); }
-        .sw i { width: 10px; height: 10px; border-radius: 50%; display: block; }
-        .numbox { display: flex; align-items: stretch; height: 32px; background: #151515; border: 1px solid #333; border-radius: 6px; overflow: hidden; }
-        .numbox input { width: 48px; box-sizing: border-box; background: transparent; border: 0; color: #ddd; padding: 0 8px; text-align: right; font: 600 12px 'Monaco', monospace; outline: none; -moz-appearance: textfield; }
-        .numbox input::-webkit-inner-spin-button, .numbox input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        .numbox .st { display: flex; flex-direction: column; width: 22px; border-left: 1px solid #333; }
-        .numbox .st button { flex: 1; padding: 0; background: transparent; color: #9a9a9a; border: 0; border-radius: 0; display: flex; align-items: center; justify-content: center; }
-        .numbox .st button + button { border-top: 1px solid #333; }
-        .numbox .st button:hover { color: var(--accent); }
         .kgrid { display: grid; grid-template-columns: 50px repeat(3, minmax(0, 1fr)); gap: 6px 10px; align-items: center; }
         .kgrp { font-size: 0.7rem; font-weight: 700; color: var(--accent); }
-        .copy-mini { flex: 0 0 auto; padding: 4px 8px; background: #1a1a1a; color: #9a9a9a; border: 1px solid #2a2a2a; display: flex; align-items: center; }
-        .copy-mini:hover { color: var(--accent); border-color: var(--accent); }
         #newsPop { width: min(600px, 96vw); }
         .pop-row { display: flex; gap: 6px; margin-bottom: 10px; align-items: center; }
         .pop-sec { font-size: 0.6rem; color: #666; text-transform: uppercase; font-weight: 700; margin: 4px 0 6px; letter-spacing: 0.05em; }
 
-        .tog { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; background: #151515; color: #777; border: 1px solid #2a2a2a; padding: 7px 4px; font-size: 0.65rem; }
-        .tog.on { color: var(--accent); border-color: var(--accent); background: rgba(59,130,246,0.12); }
 
         .krow { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.72rem; color: #aaa; }
         .key { flex: 0 0 auto; min-width: 46px; padding: 4px 6px; background: #1a1a1a; color: var(--yellow); border: 1px solid #333; border-radius: 6px; font-family: 'Monaco', monospace; font-size: 0.72rem; text-transform: none; font-weight: 700; }
@@ -189,9 +158,6 @@
         body.phone #newsBtn { grid-area: news; }
         body.phone #rulesBtn { grid-area: rules; }
         body.phone #trashBtn { grid-area: trash; }
-        body.phone .nav { grid-area: nav; gap: 8px; }
-        body.phone .nav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background: #1a1a1a; color: #d4d4d4; border: 1px solid #2a2a2a; font-size: 0.8rem; }
-        body.phone .nav button:active { border-color: var(--accent); color: var(--accent); }
         body.phone svg.ic { width: 22px; height: 22px; }
 
         body.phone:not(.live) #pauseBtn, body.phone.live #startBtn { display: none; }
@@ -200,45 +166,11 @@
         body.phone.live #textInput, body.phone.live .controls, body.phone.live #pasteBtn, body.phone.live #newsBtn, body.phone.live #rulesBtn, body.phone.live #trashBtn { display: none; }
 
         /* ---- phone menus: small sheets / cards, News full screen ---- */
-        .pop-close, .subtabs, .copy-in, .bigcopy, .addp, .bstep, .msu, .rarrow, .copy-ov, #backdrop { display: none; }
-        .nbmid, .duo { display: contents; }
-        .repo-wrap { position: relative; }
-        .subtabs { gap: 4px; background: #151515; border: 1px solid #2a2a2a; border-radius: 8px; padding: 3px; box-sizing: border-box; }
-        .subtabs button { flex: 1; padding: 0; }
+        @keyframes syncpulse { from { opacity: 0.25; } to { opacity: 1; } }
         body.phone #backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.66); z-index: 450; }
         body.phone.pop-open #backdrop { display: block; }
-        body.phone .pop-close { display: flex; align-items: center; justify-content: center; flex: 0 0 48px; width: 48px; height: 48px; padding: 0; font-size: 1.6rem; line-height: 1; background: #1a1a1a; color: #bbb; border: 1px solid #2a2a2a; border-radius: 8px; }
         body.phone #gearPop, body.phone #rulesPop, body.phone #newsPop { position: fixed; z-index: 500; width: auto; max-height: none !important; box-sizing: border-box; }
         body.phone #newsPop { top: 8px; left: 8px; right: 8px; bottom: 8px; }
-        body.phone .keys-sec { display: none; }
-        body.phone .tabs { gap: 8px; align-items: stretch; margin-bottom: 14px; }
-        body.phone .tabgroup { height: 48px; box-sizing: border-box; }
-        body.phone .tab { flex: 1; height: 100%; padding: 0; font-size: 0.72rem; }
-        body.phone .tog { height: 52px; font-size: 0.7rem; }
-        body.phone .seg { height: 52px; box-sizing: border-box; }
-        body.phone .seg button { flex: 1; padding: 0; font-size: 0.72rem; }
-        body.phone .blk-bar .pop-row { flex-wrap: wrap; }
-        body.phone .blk-bar .seg, body.phone #swGroup { flex: 1 1 100%; }
-        body.phone .sw { flex: 1; height: 52px; }
-        body.phone .blk-amber { flex-direction: column; align-items: stretch; gap: 8px; }
-        body.phone .blk-amber > div { display: block; }
-        body.phone .msx { display: none; }
-        body.phone .numbox { height: 52px; border: 0; background: none; overflow: visible; gap: 8px; }
-        body.phone .numbox .st { display: none; }
-        body.phone .bstep { display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; padding: 0; background: #1a1a1a; color: #b5b5b5; border: 1px solid #2a2a2a; border-radius: 8px; }
-        body.phone .nbmid { display: flex; flex: 1; align-items: center; justify-content: center; gap: 6px; background: #151515; border: 1px solid #333; border-radius: 8px; }
-        body.phone .nbmid input { width: 72px; flex: none; text-align: right; font-size: 18px; }
-        body.phone .msu { display: block; font-size: 0.75rem; color: #9a9a9a; }
-        body.phone #tabN .pop-ta { font-size: 0.85rem; }
-        body.phone .repo-wrap .pop-ta { height: 48px; padding: 0 56px 0 12px; font: 600 14px 'Monaco', monospace; }
-        body.phone .copy-in { display: flex; align-items: center; justify-content: center; position: absolute; top: 4px; right: 4px; width: 40px; height: 40px; padding: 0; background: #0c0c0c; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; }
-        body.phone .subtabs { display: flex; flex: 0 0 44px; height: 44px; }
-        body.phone .pblock { display: none; }
-        body.phone .pblock.sel { display: flex; flex-direction: column; flex: 1; min-height: 0; }
-        body.phone .pblock > .pop-row { display: none; }
-        body.phone .pblock .pop-ta { flex: 1; height: auto; min-height: 0; resize: none; }
-        body.phone .bigcopy { display: flex; align-items: center; justify-content: center; flex: 0 0 56px; height: 56px; padding: 0; background: var(--accent); color: #fff; border: 0; border-radius: 10px; }
-        body.phone #tabN.on { flex: 1; min-height: 0; }
         body.phone .rrow { display: grid; grid-template-columns: 52px minmax(0, 1fr) 44px; gap: 8px; align-items: center; background: #121212; border: 1px solid #262626; border-radius: 10px; padding: 10px; margin-bottom: 12px; }
         body.phone .rtog { width: 52px; height: 30px; flex: none; border-radius: 15px; padding: 0 3px; justify-content: flex-start; grid-column: 1; grid-row: 1; }
         body.phone .rtog::after { width: 22px; height: 22px; }
@@ -272,9 +204,6 @@
         @media (orientation: portrait) {
             body.phone #gearPop, body.phone #rulesPop { left: 8px; right: 8px; bottom: 8px; top: auto; border-radius: 16px; padding: 22px 12px 12px; overflow-y: auto; max-height: calc(100dvh - 16px) !important; box-shadow: 0 -8px 40px rgba(0,0,0,0.6); }
             body.phone #gearPop::before, body.phone #rulesPop::before { content: ''; position: absolute; top: 8px; left: 50%; margin-left: -18px; width: 36px; height: 4px; border-radius: 2px; background: #444; }
-            body.phone #gearPop.open.tn { display: flex; flex-direction: column; height: min(640px, calc(100dvh - 48px)); }
-            body.phone #gearPop .tabpane.on { gap: 16px; }
-            body.phone #gearPop #tabN.on { gap: 12px; }
             body.phone .rarrow { display: none; }
             body.phone #newsPop.open { grid-template-rows: 28px minmax(0, 1fr) auto 44px 56px; }
             body.phone #newsPop #pubStamp { grid-column: 1 / span 5; grid-row: 1; justify-self: start; align-self: center; }
@@ -295,24 +224,6 @@
         @media (orientation: landscape) {
             body.phone #gearPop, body.phone #rulesPop { left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(640px, calc(100vw - 16px)); max-height: calc(100dvh - 16px) !important; overflow-y: auto; border-radius: 14px; padding: 12px; }
             body.phone #rulesPop { width: min(720px, calc(100vw - 16px)); }
-            body.phone #gearPop .tabpane.on { gap: 12px; }
-            body.phone .tabs { margin-bottom: 12px; }
-            body.phone .tog, body.phone .sw, body.phone .seg { height: 44px; }
-            body.phone .blk-bar .pop-row { flex-wrap: nowrap; }
-            body.phone .blk-bar .seg { flex: 1 1 0; }
-            body.phone #swGroup { flex: 0 0 150px; }
-            body.phone .duo { display: flex; gap: 16px; align-items: flex-start; }
-            body.phone .duo > * { flex: 1; min-width: 0; }
-            body.phone .duo > .blk-bar { flex: 1.3; }
-            body.phone .numbox, body.phone .bstep { height: 44px; }
-            body.phone .bstep { flex-basis: 44px; width: 44px; }
-            body.phone #gearPop.open.tn { width: min(720px, calc(100vw - 16px)); height: min(300px, calc(100dvh - 16px)); display: flex; flex-direction: column; }
-            body.phone #tabN.on { display: grid; grid-template-columns: minmax(0, 1fr) 260px; grid-template-rows: 44px minmax(0, 1fr); gap: 8px; }
-            body.phone #tabN .repo-blk label { display: none; }
-            body.phone #tabN .repo-wrap .pop-ta, body.phone #tabN .repo-wrap { height: 44px; }
-            body.phone #tabN .copy-in { top: 2px; right: 2px; }
-            body.phone #tabN .pblock.sel { grid-column: 1 / -1; grid-row: 2; }
-            body.phone #tabN .bigcopy { grid-column: 1 / -1; grid-row: 2; justify-self: end; align-self: start; margin: 8px; width: 44px; height: 44px; flex: none; background: #0c0c0c; color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; z-index: 2; }
             body.phone .rrow { display: flex; padding: 8px 10px; margin-bottom: 8px; }
             body.phone .rfind { flex: 1.3; }
             body.phone .rrep { flex: 1; }
@@ -342,10 +253,110 @@
         @media (orientation: portrait) {
             body.phone .wrapper { grid-template-columns: minmax(0, 1fr) 52px 52px 52px; grid-template-rows: 48px 40px minmax(0, 1fr) 48px auto;
                 grid-template-areas: "go stop stop gear" "prog prog prog prog" "txt txt txt txt" "paste news rules trash" "ctl ctl ctl ctl"; }
-            body.phone.live .wrapper { grid-template-rows: 48px 40px minmax(0, 1fr) 64px;
+            body.phone.live .wrapper { grid-template-rows: 48px 40px minmax(0, 1fr) auto;
                 grid-template-areas: "go stop stop gear" "prog prog prog prog" "disp disp disp disp" "nav nav nav nav"; }
             body.phone .controls .card { min-height: 72px; flex: 0 0 auto; }
-            body.phone .nav button { flex-direction: column; gap: 4px; font-size: 0.7rem; }
+        }
+        /* ---- settings: one list ---- */
+        .pop-close, .addp, .rarrow, .copy-ov, #backdrop { display: none; }
+        #gearPop { width: 396px; padding: 14px; overscroll-behavior: contain; }
+        #gearPop.open { display: flex; flex-direction: column; gap: 12px; }
+        .srow { display: flex; align-items: center; gap: 8px; min-height: 40px; }
+        .lead { flex: 0 0 32px; display: flex; align-items: center; justify-content: center; color: #7a7a7a; }
+        .lead .ic { width: 22px; height: 22px; }
+        .tog { flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; justify-content: center; background: #151515; color: #9a9a9a; border: 1px solid #2a2a2a; border-radius: 8px; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 0; }
+        .tog.on { color: var(--accent); border-color: var(--accent); background: rgba(59,130,246,0.12); }
+        #swGroup { flex: 1; min-width: 0; display: flex; gap: 8px; }
+        .sw { flex: 1; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px; background: #151515; border: 1px solid #2a2a2a; border-radius: 8px; padding: 0; }
+        .sw.on { border-color: var(--accent); background: rgba(59,130,246,0.12); }
+        .sw i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+        .numbox { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+        .bstep { flex: 0 0 40px; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: #b5b5b5; border: 1px solid #2a2a2a; border-radius: 8px; }
+        .bstep:hover { color: var(--accent); border-color: var(--accent); }
+        .nbmid { flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; justify-content: center; gap: 6px; background: #151515; border: 1px solid #333; border-radius: 8px; }
+        .nbmid input { width: 64px; flex: none; box-sizing: border-box; background: transparent; border: 0; color: #ddd; text-align: right; font: 700 16px 'Monaco', monospace; outline: none; padding: 0; -moz-appearance: textfield; }
+        .nbmid input::-webkit-inner-spin-button, .nbmid input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .msu { font-size: 0.75rem; color: #9a9a9a; }
+        .prompts-row { padding: 12px 0; border-top: 1px solid #1f1f1f; border-bottom: 1px solid #1f1f1f; }
+        .pbtn { flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #151515; color: #b5b5b5; border: 1px solid #2a2a2a; border-radius: 8px; padding: 0; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; }
+        .pbtn:hover { color: var(--accent); border-color: var(--accent); }
+        .pbtn .ic { width: 18px; height: 18px; }
+        .plink { flex: 0 0 52px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(59,130,246,0.12); color: var(--accent); border: 1px solid var(--accent); border-radius: 8px; text-decoration: none; }
+        .plink .ic { width: 22px; height: 22px; }
+        /* prompt sync dot on the News reload button */
+        #newsRetry { position: relative; }
+        .sdot { position: absolute; right: 2px; top: 2px; width: 7px; height: 7px; border-radius: 50%; background: #555; }
+        #newsRetry.ok .sdot { background: var(--accent); }
+        #newsRetry.run .sdot { background: var(--accent); animation: syncpulse 0.8s ease-in-out infinite alternate; }
+        /* dot popup on the laptop: strip */
+        .led-legend { width: max-content; }
+        .lg2 { display: flex; align-items: center; gap: 8px; padding: 16px 16px 78px; background: #0c0c0c; border: 1px solid #2a2a2a; border-radius: 10px; box-shadow: 0 12px 40px rgba(0,0,0,0.8); }
+        .lg2-n { display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 42px; }
+        .lg2-n b { font: 600 10px 'Inter', sans-serif; color: #9ca3af; letter-spacing: 0.04em; }
+        .lg2-a { display: flex; color: #555; }
+        .lg2-a .ic { width: 12px; height: 12px; stroke-width: 2; }
+        .lg2-loop { position: relative; display: flex; align-items: center; gap: 8px; border: 1px dashed var(--accent); border-radius: 10px; padding: 10px 12px 8px; }
+        .lg2-rep { position: absolute; top: -9px; right: 10px; background: #0c0c0c; color: var(--accent); display: flex; padding: 0 4px; }
+        .lg2-rep .ic { width: 14px; height: 14px; }
+        .lg2-retry { position: absolute; left: 12px; top: 100%; margin-top: 4px; width: 42px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .lg2-retry svg { width: 26px; height: 26px; }
+        /* news: back / forward + chip */
+        .nav-news { display: none; }
+        #newsChip { display: none; align-items: center; gap: 4px; background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid var(--accent); font-size: 0.8rem; font-family: 'Monaco', monospace; padding: 2px 8px; border-radius: 10px; }
+        #newsChip .ic { width: 12px; height: 12px; }
+        #newsChip b { font-weight: 700; }
+        body.has-news #newsChip { display: flex; }
+        .l-port, .l-land { display: none; }
+        /* ---- phone: settings, nav, panel actions ---- */
+        body.phone .led-legend { display: none !important; }
+        body.phone .led-slot { cursor: default; }
+        body.phone .prompts-row, body.phone .keys-sec, body.phone #togList { display: none; }
+        body.phone .pop-close { display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; padding: 0; font-size: 1.6rem; line-height: 1; background: #1a1a1a; color: #bbb; border: 1px solid #2a2a2a; border-radius: 8px; }
+        body.phone .tog, body.phone .sw, body.phone .bstep, body.phone .nbmid { height: 52px; }
+        body.phone .bstep { flex-basis: 52px; width: 52px; }
+        body.phone .nbmid input { font-size: 18px; }
+        body.phone .lead { flex-basis: 32px; }
+        body.phone .nav { grid-area: nav; gap: 8px; }
+        body.phone .nav-phr { display: flex; gap: 8px; }
+        body.phone .nav-news { gap: 8px; }
+        body.phone.has-news .nav-news { display: flex; }
+        body.phone .nav button { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; background: #1a1a1a; color: #d4d4d4; border: 1px solid #2a2a2a; font-size: 0.8rem; }
+        body.phone .nav button:active { border-color: var(--accent); color: var(--accent); }
+        body.phone .nav-news button { background: rgba(59,130,246,0.10); color: var(--accent); border-color: var(--accent); }
+        body.phone .display-box { touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+        body.phone.paused .display-box::before { content: ''; position: absolute; inset: 0; border-radius: 12px; z-index: 3; pointer-events: none; background: linear-gradient(var(--yellow), var(--yellow)) 46% 50% / 9px 46px no-repeat, linear-gradient(var(--yellow), var(--yellow)) 54% 50% / 9px 46px no-repeat, rgba(0,0,0,0.6); }
+        @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        @keyframes holdring { 0% { opacity: 0; --a: 0deg; } 25% { opacity: 1; } 100% { opacity: 1; --a: 360deg; } }
+        body.phone .display-box.holding::after { content: ''; position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; z-index: 4; pointer-events: none; background: conic-gradient(var(--red) var(--a), transparent 0); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px)); mask: radial-gradient(farthest-side, transparent calc(100% - 9px), #000 calc(100% - 9px)); animation: holdring 1s linear forwards; }
+        @media (orientation: portrait) {
+            body.phone #gearPop.open { gap: 14px; }
+            body.phone .nav { display: none; flex-direction: column; }
+            body.phone.live .nav { display: flex; }
+            body.phone .nav-news button { height: 52px; flex-direction: row; }
+            body.phone .nav-phr { height: 64px; }
+            body.phone .nav-phr button { flex-direction: column; gap: 4px; font-size: 0.7rem; }
+            .l-port { display: inline; }
+        }
+        @media (orientation: landscape) {
+            body.phone #gearPop.open { width: min(820px, calc(100vw - 16px)); flex-direction: row; align-items: center; gap: 8px; padding: 12px; }
+            body.phone .srow { display: contents; }
+            body.phone #togTime, body.phone #togBar { flex: 1; }
+            body.phone #swGroup { flex: 1.5; }
+            body.phone .numbox { flex: 1.6; }
+            body.phone #gearPop .pop-close { order: 9; flex-basis: 48px; width: 48px; height: 48px; }
+            body.phone .tog, body.phone .sw, body.phone .bstep, body.phone .nbmid { height: 48px; }
+            body.phone .bstep { flex-basis: 48px; width: 48px; }
+            body.phone .nav-phr, body.phone.has-news .nav-news { display: contents; }
+            body.phone #newsBackBtn { order: 0; } body.phone #prevBtn { order: 1; } body.phone #repBtn { order: 2; } body.phone #nextBtn { order: 3; } body.phone #newsFwdBtn { order: 4; }
+            .l-land { display: inline; }
+        }
+        body.phone .prompts-row { display: none !important; }
+        @media (orientation: landscape) and (max-width: 700px) {
+            body.phone #gearPop.open { flex-wrap: wrap; width: min(640px, calc(100vw - 16px)); }
+            body.phone .srow { display: flex; }
+            body.phone .s1 { flex: 1 1 100%; }
+            body.phone .s2, body.phone .s3 { flex: 1 1 calc(50% - 4px); min-width: 0; }
+            body.phone #gearPop .pop-close { order: 0; }
         }
     </style>
 </head>
@@ -366,6 +377,14 @@
         <symbol id="i-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
         <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
         <symbol id="i-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+        <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7l5.7 5.6a8 8 0 1 1-11.4 0z"/></symbol>
+        <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><polyline points="12 9 12 13 15 15"/><line x1="9" y1="2" x2="15" y2="2"/></symbol>
+        <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></symbol>
+        <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></symbol>
+        <symbol id="i-skipb" viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></symbol>
+        <symbol id="i-skipf" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></symbol>
+        <symbol id="i-paper" viewBox="0 0 24 24"><path d="M4 4h13v15a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2V4z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 8h7M7 12h7M7 16h4"/></symbol>
+        <symbol id="i-repeat" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
         <symbol id="i-up" viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></symbol>
         <symbol id="i-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
         <symbol id="i-bar" viewBox="0 0 24 24"><rect x="2" y="9" width="20" height="6" rx="3"/><rect x="2" y="9" width="12" height="6" rx="3" fill="currentColor"/></symbol>
@@ -387,6 +406,7 @@
             <div class="progress-container">
                 <div class="progress-bar"><div id="progressFill"></div></div>
                 <div class="timer-meta">
+                    <div id="newsChip" title="News number"><svg class="ic"><use href="#i-paper"/></svg><b id="newsChipTxt">1/1</b></div>
                     <div id="progressPercent">0%</div>
                     <div id="spentTime">00:00</div>
                     <div id="totalSessionTime">00:00</div>
@@ -396,18 +416,23 @@
         <div class="display-box">
             <div class="led-slot" id="ledSlot">
                 <div id="statusLed" class="status-led"></div>
-                <div class="led-legend"><div class="lg-card">
-                    <div class="lg-title">ENGINE STATUS, IN ORDER</div>
-                    <span class="lg-rail"></span>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-off"></span></span><span class="lg-txt"><b>off</b><span>before Start</span></span></div>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-ready"></span></span><span class="lg-txt"><b>ready</b><span>Start pressed, engine awake</span></span></div>
-                    <div class="lg-loop"><i>repeats for every phrase</i>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-buf"></span></span><span class="lg-txt"><b>buffering</b><span>phrase handed to the voice, waiting for it to start</span></span></div>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-speak"></span></span><span class="lg-txt"><b>speaking</b><span>voice reads the phrase (pulses)</span></span></div>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-ready"></span></span><span class="lg-txt"><b>writing</b><span>voice done, timer still running</span></span></div>
+                <div class="led-legend"><div class="lg2">
+                    <div class="lg2-n"><span class="lg-dot d-off"></span><b>off</b></div>
+                    <span class="lg2-a"><svg class="ic"><use href="#i-right"/></svg></span>
+                    <div class="lg2-n"><span class="lg-dot d-ready"></span><b>ready</b></div>
+                    <span class="lg2-a"><svg class="ic"><use href="#i-right"/></svg></span>
+                    <div class="lg2-loop">
+                        <span class="lg2-rep"><svg class="ic"><use href="#i-repeat"/></svg></span>
+                        <div class="lg2-n"><span class="lg-dot d-buf"></span><b>buffer</b></div>
+                        <span class="lg2-a"><svg class="ic"><use href="#i-right"/></svg></span>
+                        <div class="lg2-n"><span class="lg-dot d-speak"></span><b>speak</b></div>
+                        <span class="lg2-a"><svg class="ic"><use href="#i-right"/></svg></span>
+                        <div class="lg2-n"><span class="lg-dot d-ready"></span><b>write</b></div>
+                        <div class="lg2-retry">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke-linecap="round" aria-hidden="true"><defs><marker id="lgar" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8z" fill="#ef4444"/></marker><marker id="lgag" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8z" fill="#888"/></marker></defs><line x1="8" y1="1" x2="8" y2="23" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#lgar)"/><line x1="18" y1="25" x2="18" y2="3" stroke="#888" stroke-width="1.5" marker-end="url(#lgag)"/></svg>
+                            <div class="lg2-n"><span class="lg-dot d-ping"></span><b>retry</b></div>
+                        </div>
                     </div>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-ping"></span></span><span class="lg-txt"><b>restarting</b><span>only if no voice after 2 s: engine restarted, back to buffering</span></span></div>
-                    <div class="lg-row"><span class="lg-slot"><span class="lg-dot d-off"></span></span><span class="lg-txt"><b>off</b><span>Stop pressed, or the bulletin finished</span></span></div>
                 </div></div>
             </div>
             <div id="phrase"><span id="phWrap"><span id="currentText">READY</span><span id="phBar"></span></span></div>
@@ -425,88 +450,53 @@
             <button class="icon-btn" id="gearBtn" title="Settings"><svg class="ic"><use href="#i-gear"/></svg></button>
             <button class="icon-btn" id="trashBtn" title="Clear all (Ctrl+Z restores)"><svg class="ic"><use href="#i-trash"/></svg></button>
             <div class="nav">
-                <button id="prevBtn"><svg class="ic"><use href="#i-left"/></svg>Prev</button>
-                <button id="repBtn"><svg class="ic"><use href="#i-reset"/></svg>Repeat</button>
-                <button id="nextBtn"><svg class="ic"><use href="#i-right"/></svg>Next</button>
+                <div class="nav-news">
+                    <button id="newsBackBtn" aria-label="Previous news"><svg class="ic"><use href="#i-skipb"/></svg><span class="l-port">News back</span><span class="l-land">News</span></button>
+                    <button id="newsFwdBtn" aria-label="Next news"><svg class="ic"><use href="#i-skipf"/></svg><span class="l-port">News forward</span><span class="l-land">News</span></button>
+                </div>
+                <div class="nav-phr">
+                    <button id="prevBtn"><svg class="ic"><use href="#i-left"/></svg>Prev</button>
+                    <button id="repBtn"><svg class="ic"><use href="#i-reset"/></svg>Repeat</button>
+                    <button id="nextBtn"><svg class="ic"><use href="#i-right"/></svg>Next</button>
+                </div>
             </div>
 
             <div class="pop" id="gearPop">
-                <div class="tabs">
-                    <div class="tabgroup">
-                        <button class="tab on" data-tab="p">Practice</button>
-                        <button class="tab" data-tab="n">News setup</button>
-                    </div>
+                <div class="srow s1">
+                    <span class="lead"><svg class="ic"><use href="#i-eyeoff"/></svg></span>
+                    <button class="tog" id="togTime" title="Hide the number">Time</button>
+                    <button class="tog" id="togList" title="Hide the phrase list">List</button>
+                    <button class="tog" id="togBar" title="Hide the bar">Bar</button>
                     <button class="pop-close" aria-label="Close">&times;</button>
                 </div>
-                <div class="tabpane on" id="tabP">
-                    <div class="blk-hide">
-                        <div class="sec">Hide</div>
-                        <div class="pop-row" style="margin:6px 0 0;">
-                            <button class="tog" id="togTime" title="Hide the number"><svg class="ic"><use href="#i-eyeoff"/></svg>Time</button>
-                            <button class="tog" id="togList" title="Hide the phrase list"><svg class="ic"><use href="#i-eyeoff"/></svg>List</button>
-                            <button class="tog" id="togBar" title="Hide the bar"><svg class="ic"><use href="#i-eyeoff"/></svg>Bar</button>
-                        </div>
-                    </div>
-                    <div class="duo">
-                        <div class="blk-bar">
-                            <div class="sec">Bar</div>
-                            <div class="pop-row" style="margin:6px 0 0; gap:10px;">
-                                <div class="seg" id="barModeSeg"><button data-m="track">Tracking</button><button data-m="even">Even</button></div>
-                                <div id="swGroup" style="display:flex; gap:6px;">
-                                    <button class="sw" data-c="tri" aria-label="Blue, yellow, red"><i style="background:var(--accent)"></i><i style="background:var(--yellow)"></i><i style="background:var(--red)"></i></button>
-                                    <button class="sw" data-c="blue" aria-label="Blue only"><i style="background:var(--accent)"></i></button>
-                                    <button class="sw" data-c="grey" aria-label="Grey only"><i style="background:var(--grey)"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pop-row blk-amber" style="justify-content:space-between; margin:0;">
-                            <label class="sec" for="bufInput" style="text-align:left;">Amber light after</label>
-                            <div style="display:flex; align-items:center; gap:6px;">
-                                <div class="numbox" id="bufBox">
-                                    <button class="bstep" id="bufMinus" aria-label="Minus 50 ms"><svg class="ic"><use href="#i-minus"/></svg></button>
-                                    <div class="nbmid"><input type="number" id="bufInput" min="0" step="50"><span class="msu">ms</span></div>
-                                    <button class="bstep" id="bufPlus" aria-label="Plus 50 ms"><svg class="ic"><use href="#i-plus"/></svg></button>
-                                    <div class="st">
-                                        <button id="bufUp" aria-label="Plus 50 ms"><svg class="ic" style="width:10px;height:10px;stroke-width:3"><use href="#i-up"/></svg></button>
-                                        <button id="bufDown" aria-label="Minus 50 ms"><svg class="ic" style="width:10px;height:10px;stroke-width:3"><use href="#i-down"/></svg></button>
-                                    </div>
-                                </div>
-                                <span class="msx" style="font-size:0.7rem; color:#9a9a9a;">ms</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="keys-sec">
-                        <div class="pop-row" style="justify-content:space-between; margin:0 0 6px;">
-                            <div class="sec">Keys</div>
-                            <button class="mini" id="keyReset" title="Reset keys"><svg class="ic" style="width:14px;height:14px"><use href="#i-reset"/></svg></button>
-                        </div>
-                        <div class="kgrid" id="keyGrid"></div>
+                <div class="srow s2">
+                    <span class="lead"><svg class="ic"><use href="#i-drop"/></svg></span>
+                    <div id="swGroup">
+                        <button class="sw" data-c="tri" aria-label="Blue, yellow, red"><i style="background:var(--accent)"></i><i style="background:var(--yellow)"></i><i style="background:var(--red)"></i></button>
+                        <button class="sw" data-c="blue" aria-label="Blue only"><i style="background:var(--accent)"></i></button>
+                        <button class="sw" data-c="grey" aria-label="Grey only"><i style="background:var(--grey)"></i></button>
                     </div>
                 </div>
-                <div class="tabpane" id="tabN">
-                    <div class="repo-blk">
-                        <label class="sec" for="repoInput" style="text-align:left; margin-bottom:6px;">Data repo</label>
-                        <div class="repo-wrap">
-                            <input class="pop-ta" id="repoInput" placeholder="user/repo" spellcheck="false">
-                            <button class="copy-in" id="copyRepo" aria-label="Copy"><svg class="ic"><use href="#i-copy"/></svg></button>
-                        </div>
+                <div class="srow s3">
+                    <span class="lead"><svg class="ic"><use href="#i-timer"/></svg></span>
+                    <div class="numbox" id="bufBox">
+                        <button class="bstep" id="bufMinus" aria-label="Minus 50 ms"><svg class="ic"><use href="#i-minus"/></svg></button>
+                        <div class="nbmid"><input type="number" id="bufInput" min="0" step="50" aria-label="Amber light after, in milliseconds"><span class="msu">ms</span></div>
+                        <button class="bstep" id="bufPlus" aria-label="Plus 50 ms"><svg class="ic"><use href="#i-plus"/></svg></button>
                     </div>
-                    <div class="subtabs" id="subTabs"><button class="on" data-p="c">Categories</button><button data-p="b">Bulletins</button></div>
-                    <div class="pblock sel" id="pbC">
-                        <div class="pop-row" style="justify-content:space-between; margin:0 0 6px;">
-                            <label class="sec" for="promptInput" style="text-align:left;">Prompt · categories</label>
-                            <button class="copy-mini" id="copyPrompt" title="Copy prompt"><svg class="ic" style="width:14px;height:14px"><use href="#i-copy"/></svg></button>
-                        </div>
-                        <textarea class="pop-ta" id="promptInput" rows="5"></textarea>
+                </div>
+                <div class="srow prompts-row">
+                    <span class="lead"><svg class="ic"><use href="#i-file"/></svg></span>
+                    <button class="pbtn" id="copyPrompt" aria-label="Copy the Categories prompt only"><svg class="ic"><use href="#i-copy"/></svg>Categories</button>
+                    <button class="pbtn" id="copyPromptB" aria-label="Copy the Bulletins prompt only"><svg class="ic"><use href="#i-copy"/></svg>Bulletins</button>
+                    <a class="plink" id="promptsLink" href="#" target="_blank" rel="noopener" aria-label="Open the prompts folder on GitHub"><svg class="ic"><use href="#i-github"/></svg></a>
+                </div>
+                <div class="keys-sec">
+                    <div class="pop-row" style="justify-content:space-between; margin:0 0 6px;">
+                        <div class="sec">Keys</div>
+                        <button class="mini" id="keyReset" title="Reset keys"><svg class="ic" style="width:14px;height:14px"><use href="#i-reset"/></svg></button>
                     </div>
-                    <div class="pblock" id="pbB">
-                        <div class="pop-row" style="justify-content:space-between; margin:0 0 6px;">
-                            <label class="sec" for="promptBInput" style="text-align:left;">Prompt · bulletins</label>
-                            <button class="copy-mini" id="copyPromptB" title="Copy prompt"><svg class="ic" style="width:14px;height:14px"><use href="#i-copy"/></svg></button>
-                        </div>
-                        <textarea class="pop-ta" id="promptBInput" rows="5"></textarea>
-                    </div>
-                    <button class="bigcopy" id="copyPromptBig" aria-label="Copy prompt"><svg class="ic"><use href="#i-copy"/></svg></button>
+                    <div class="kgrid" id="keyGrid"></div>
                 </div>
             </div>
 
@@ -520,7 +510,7 @@
                 <div class="pop-head"><button class="pop-close" aria-label="Close">&times;</button></div>
                 <div class="pop-row" style="align-items:flex-start; margin-bottom:8px;">
                     <div class="chips" id="newsChips" style="flex:1; margin:0;"></div>
-                    <button class="mini" id="newsRetry" title="Reload"><svg class="ic" style="width:14px;height:14px"><use href="#i-reset"/></svg></button>
+                    <button class="mini" id="newsRetry" title="Reload"><svg class="ic" style="width:14px;height:14px"><use href="#i-reset"/></svg><i class="sdot"></i></button>
                     <span id="newsAt" title="Fetched at"></span>
                     <span id="newsCount">0 · 0 w</span>
                     <button class="icon-btn" id="newsCopy" style="flex:0 0 38px;height:30px;" title="Copy all"><svg class="ic"><use href="#i-copy"/></svg></button>
@@ -541,9 +531,10 @@
 <script>
     const $ = id => document.getElementById(id);
     const synth = window.speechSynthesis;
+    const DEFAULT_REPO = 'vikrant123pundir/air-news';
     const isPhone = matchMedia('(pointer: coarse)').matches;      // touch screen: phone layout
     if (isPhone) document.body.classList.add('phone');
-    let chunks = [], currentIdx = 0, advanceTimer, watchdogTimer;
+    let chunks = [], newsStarts = [], currentIdx = 0, advanceTimer, watchdogTimer;
     let isPaused = false, active = false, speakToken = 0;
     let audioCtx, oscillator, gainNode;
 
@@ -608,18 +599,18 @@
     }                                                           // 'off' = no class = dark
 
     // --- THE PHRASE, AND THE BAR UNDER IT ---
-    const ph = { mode: 'none', even: false, a: [], b: [], N: 0, total: 0 };  // mode: none | inline (bar under the letters) | plain (full-width bar)
+    const ph = { mode: 'none', total: 0 };  // mode: none | inline (bar under the letters) | plain (full-width bar)
     let phText = 'READY', phBar = false, lastF = 1, rafId = 0, bufTimer = 0;
     const barColor = f => opts.barColor === 'blue' ? 'var(--accent)' : opts.barColor === 'grey' ? 'var(--grey)' : f <= 0.25 ? 'var(--red)' : f <= 0.5 ? 'var(--yellow)' : 'var(--accent)';
     function hideBars() { $('phBar').style.display = 'none'; $('cbar').style.display = 'none'; $('countdown').style.color = ''; }
 
-    // Show the phrase. With a bar: fit it on one line, then measure where every letter sits.
+    // Show the phrase. With a bar: fit it on one line (or wrap it), then the bar runs at an even speed across its width.
     function showPhrase(text, withBar) {
         phText = text; phBar = withBar;
         const t = $('currentText'), wrap = $('phWrap'), box = $('phrase');
         t.textContent = text;
         wrap.style.fontSize = ''; wrap.style.whiteSpace = 'nowrap'; wrap.style.maxWidth = '';
-        ph.mode = 'none'; ph.even = false; hideBars();
+        ph.mode = 'none'; hideBars();
         if (!withBar) return;
         const avail = box.clientWidth - 68;
         let fs = isPhone ? 28 : 26; wrap.style.fontSize = fs + 'px';
@@ -627,17 +618,7 @@
         if (wrap.offsetWidth > avail) {                         // still too long: wrap it and use the plain bar
             wrap.style.whiteSpace = 'normal'; wrap.style.maxWidth = '100%'; wrap.style.fontSize = (isPhone ? 24 : 22) + 'px'; ph.mode = 'plain'; return;
         }
-        const node = t.firstChild, wr = wrap.getBoundingClientRect(), rg = document.createRange();
-        if (opts.barMode === 'even') { ph.total = wr.width; ph.even = true; ph.mode = 'inline'; return; }   // constant speed, no letter measuring
-        ph.a = []; ph.b = [];
-        for (let i = 0; i < text.length; i++) {
-            if (!/[A-Za-z0-9]/.test(text[i])) continue;         // timing counts only letters and digits
-            rg.setStart(node, i); rg.setEnd(node, i + 1);
-            const r = rg.getBoundingClientRect();
-            ph.a.push(r.left - wr.left); ph.b.push(r.right - wr.left);
-        }
-        ph.N = ph.a.length; ph.total = wr.width;
-        if (ph.N) { ph.a[0] = 0; ph.mode = 'inline'; } else ph.mode = 'plain';
+        ph.total = wrap.getBoundingClientRect().width; ph.mode = 'inline';
     }
 
     // f = fraction of time left. The bar's right end stays put; its left end walks right.
@@ -649,9 +630,7 @@
         if (ph.mode === 'inline') {
             cb.style.display = 'none';
             if (f <= 0) { pb.style.display = 'none'; return; }
-            let x;
-            if (ph.even) x = (1 - f) * ph.total;
-            else { const L = (1 - f) * ph.N, k = Math.min(Math.floor(L), ph.N - 1); x = ph.a[k] + (L - k) * (ph.b[k] - ph.a[k]); }
+            const x = (1 - f) * ph.total;
             pb.style.display = 'block'; pb.style.left = x + 'px'; pb.style.width = Math.max(0, ph.total - x) + 'px'; pb.style.background = col;
         } else if (ph.mode === 'plain') {
             pb.style.display = 'none'; cb.style.display = 'block';
@@ -705,10 +684,19 @@
     }
 
     // --- PHRASES: one phrase per line ---
-    function splitText(raw) {
-        return raw.split(/\r?\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean).map(text => ({ text }));
+    // phrases = non-empty lines after the rules; a blank line between two phrases starts the next news item
+    function buildChunks() {
+        chunks = []; newsStarts = []; let gap = false;
+        applyRules($('textInput').value).split(/\r?\n/).forEach(l => {
+            const t = l.replace(/\s+/g, ' ').trim();
+            if (!t) { if (chunks.length) gap = true; return; }
+            if (!chunks.length || gap) newsStarts.push(chunks.length);
+            gap = false; chunks.push({ text: t });
+        });
+        document.body.classList.toggle('has-news', newsStarts.length > 1);
     }
-    function initialProcess() { chunks = splitText(applyRules($('textInput').value)); }
+    function initialProcess() { buildChunks(); }
+    const newsOf = i => { let k = 0; newsStarts.forEach((st, n) => { if (st <= i) k = n; }); return k; };
 
     function persist() { store.set('lpd_text', $('textInput').value); }
     const updateUI = () => { renderAnalysis(); updateStats(); persist(); };
@@ -724,6 +712,7 @@
         $('progressPercent').textContent = percent + '%';
         let total = 0, spent = 0;
         chunks.forEach((c, i) => { const t = calculateWait(c.text); total += t; if (i < currentIdx) spent += t; });
+        if (newsStarts.length > 1) $('newsChipTxt').textContent = (newsOf(Math.min(currentIdx, chunks.length - 1)) + 1) + '/' + newsStarts.length;
         $('totalSessionTime').textContent = formatTime(total);
         $('spentTime').textContent = formatTime(spent);
     }
@@ -806,7 +795,7 @@
     }
 
     function finish() {
-        clearTimers(); active = false; syncLive(); keepAwake(false);
+        clearTimers(); active = false; syncLive(); keepAwake(false); document.body.classList.remove('paused');
         setEngineState(false);
         showPhrase('FINISHED', false);
         $('countdown').textContent = "0.00s";
@@ -816,7 +805,7 @@
     }
 
     function beginPlay() {
-        isPaused = false; active = true; syncLive(); keepAwake(true);
+        isPaused = false; active = true; syncLive(); keepAwake(true); document.body.classList.remove('paused');
         $('pauseBtn').disabled = false;
         $('pauseBtn').textContent = "Pause";
         setEngineState(true);
@@ -834,7 +823,7 @@
     }
 
     function stopSession() {
-        hardReset(); active = false; isPaused = false; currentIdx = 0; syncLive(); keepAwake(false);
+        hardReset(); active = false; isPaused = false; currentIdx = 0; syncLive(); keepAwake(false); document.body.classList.remove('paused');
         showPhrase('READY', false);
         $('countdown').textContent = "0.00s";
         $('pauseBtn').textContent = "Pause";
@@ -849,7 +838,7 @@
     function togglePause() {
         if (!active) return;
         if (!isPaused) {
-            isPaused = true; hardReset();
+            isPaused = true; hardReset(); document.body.classList.add('paused');
             $('pauseBtn').textContent = "Resume";
             const c = chunks[currentIdx];
             if (c) $('countdown').textContent = calculateWait(c.text).toFixed(2) + "s";
@@ -857,7 +846,7 @@
             setLED('active');
             setEngineState(false);
         } else {
-            isPaused = false;
+            isPaused = false; document.body.classList.remove('paused');
             $('pauseBtn').textContent = "Pause";
             setEngineState(true);
             speak();
@@ -877,7 +866,7 @@
         store.set('lpd_trash', { text });
         stopSession();
         $('textInput').value = '';
-        chunks = [];
+        chunks = []; newsStarts = []; document.body.classList.remove('has-news');
         updateUI();
     }
     function restoreTrash() {
@@ -910,11 +899,23 @@
     $('prevBtn').onclick = () => runAction('prev');
     $('repBtn').onclick = () => runAction('repeat');
     $('nextBtn').onclick = () => runAction('next');
+    $('newsBackBtn').onclick = () => runAction('prevNews');
+    $('newsFwdBtn').onclick = () => runAction('nextNews');
+    // phone: tap the phrase panel = pause / resume; hold it for one second = stop
+    (function () {
+        if (!isPhone) return;
+        const box = document.querySelector('.display-box'); let t = 0, fired = false, down = false;
+        const cancel = () => { clearTimeout(t); box.classList.remove('holding'); down = false; };
+        box.addEventListener('pointerdown', () => { if (!active) return; down = true; fired = false; box.classList.add('holding'); t = setTimeout(() => { fired = true; box.classList.remove('holding'); down = false; stopSession(); }, 1000); });
+        box.addEventListener('pointerup', () => { if (!down) return; const wasHold = fired; cancel(); if (!wasHold) togglePause(); });
+        box.addEventListener('pointercancel', cancel); box.addEventListener('pointerleave', cancel);
+        box.addEventListener('contextmenu', (e) => e.preventDefault());
+    })();
     document.querySelectorAll('.pop-close').forEach(b => b.onclick = () => closePops());
 
     // --- KEYBOARD SHORTCUTS (editable) ---
-    const DEFAULT_KEYS = { pause: 'Space', stop: 'Escape', prev: 'ArrowLeft', repeat: 'KeyR', next: 'ArrowRight' };
-    const KEY_GROUPS = [['Play', [['pause', 'Play / pause', 2], ['stop', 'Stop', 1]]], ['Move', [['prev', 'Prev', 1], ['repeat', 'Repeat', 1], ['next', 'Next', 1]]]];
+    const DEFAULT_KEYS = { pause: 'Space', stop: 'Escape', prev: 'ArrowLeft', repeat: 'KeyR', next: 'ArrowRight', prevNews: 'ArrowUp', nextNews: 'ArrowDown' };
+    const KEY_GROUPS = [['Play', [['pause', 'Play / pause', 2], ['stop', 'Stop', 1]]], ['Move', [['prev', 'Prev', 1], ['repeat', 'Repeat', 1], ['next', 'Next', 1]]], ['News', [['prevNews', 'Prev', 1], ['nextNews', 'Next', 1]]]];
     const savedKeys = store.get('lpd_keys', {});
     let keys = {}; Object.keys(DEFAULT_KEYS).forEach(a => keys[a] = savedKeys[a] || DEFAULT_KEYS[a]);
     let captureAction = null;
@@ -947,6 +948,8 @@
             case 'repeat': if (active) jumpTo(currentIdx); break;
             case 'prev': if (active) jumpTo(Math.max(0, currentIdx - 1)); break;
             case 'next': if (active && currentIdx < chunks.length - 1) jumpTo(currentIdx + 1); break;
+            case 'nextNews': if (active && newsStarts.length > 1) { const k = newsOf(currentIdx); if (k < newsStarts.length - 1) jumpTo(newsStarts[k + 1]); } break;
+            case 'prevNews': if (active && newsStarts.length > 1) { const k = newsOf(currentIdx); jumpTo(currentIdx > newsStarts[k] ? newsStarts[k] : newsStarts[Math.max(0, k - 1)]); } break;
             case 'stop': stopSession(); break;
         }
     }
@@ -986,9 +989,10 @@
         runAction(act);
     });
 
-    // --- OPTIONS (toggles + prompt) ---
-    let opts = Object.assign({ hideTime: false, hideList: false, bar: true, prompt: '', promptB: '', repo: '', bufMs: 500, barMode: 'track', barColor: 'tri' }, store.get('lpd_opts', {}));
-    delete opts.hideCur;
+    // --- OPTIONS (toggles, colour, amber delay) + PROMPT SYNC ---
+    let opts = Object.assign({ hideTime: false, hideList: false, bar: true, prompt: '', promptB: '', repo: '', bufMs: 500, barColor: 'tri' }, store.get('lpd_opts', {}));
+    delete opts.hideCur; delete opts.barMode;
+    localStorage.removeItem('lpd_psync');
     function applyOpts() {
         document.body.classList.toggle('hide-time', opts.hideTime);
         document.body.classList.toggle('hide-list', opts.hideList);
@@ -996,23 +1000,19 @@
         $('togTime').classList.toggle('on', opts.hideTime);
         $('togList').classList.toggle('on', opts.hideList);
         $('togBar').classList.toggle('on', !opts.bar);
-        document.querySelectorAll('#barModeSeg button').forEach(b => b.classList.toggle('on', b.dataset.m === opts.barMode));
         document.querySelectorAll('#swGroup .sw').forEach(b => b.classList.toggle('on', b.dataset.c === opts.barColor));
         store.set('lpd_opts', opts);
     }
     $('togTime').onclick = (e) => { opts.hideTime = !opts.hideTime; applyOpts(); e.currentTarget.blur(); };
     $('togList').onclick = (e) => { opts.hideList = !opts.hideList; applyOpts(); e.currentTarget.blur(); };
     $('togBar').onclick = (e) => { opts.bar = !opts.bar; applyOpts(); e.currentTarget.blur(); };
-    $('barModeSeg').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; opts.barMode = b.dataset.m; applyOpts(); refreshBar(); b.blur(); };
     $('swGroup').onclick = (e) => { const b = e.target.closest('.sw'); if (!b) return; opts.barColor = b.dataset.c; applyOpts(); if (phBar && ph.mode !== 'none') setBar(lastF); b.blur(); };
-    document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === b));
-        $('tabP').classList.toggle('on', b.dataset.tab === 'p'); $('tabN').classList.toggle('on', b.dataset.tab === 'n'); $('gearPop').classList.toggle('tn', b.dataset.tab === 'n'); b.blur();
-    });
     function bufStep(dir) { const el = $('bufInput'); if (dir > 0) el.stepUp(); else el.stepDown(); el.dispatchEvent(new Event('input')); }
-    $('bufUp').onclick = (e) => { bufStep(1); e.currentTarget.blur(); };
-    $('bufDown').onclick = (e) => { bufStep(-1); e.currentTarget.blur(); };
+    $('bufMinus').onclick = (e) => { bufStep(-1); e.currentTarget.blur(); };
+    $('bufPlus').onclick = (e) => { bufStep(1); e.currentTarget.blur(); };
     $('bufBox').addEventListener('wheel', (e) => { e.preventDefault(); bufStep(e.deltaY < 0 ? 1 : -1); }, { passive: false });
+    $('bufInput').value = opts.bufMs;
+    $('bufInput').oninput = (e) => { opts.bufMs = Math.max(0, parseInt(e.target.value) || 0); store.set('lpd_opts', opts); };
     function copyPromptBtn(btnId, get) {
         $(btnId).onclick = async () => {
             const t = get(); if (!t.trim()) return;
@@ -1022,24 +1022,32 @@
         };
     }
     copyPromptBtn('copyPrompt', () => opts.prompt); copyPromptBtn('copyPromptB', () => opts.promptB);
-    copyPromptBtn('copyPromptBig', () => ($('pbB').classList.contains('sel') ? opts.promptB : opts.prompt));
-    copyPromptBtn('copyRepo', () => $('repoInput').value);
     copyPromptBtn('copyText', () => $('textInput').value);
-    document.querySelectorAll('#subTabs button').forEach(b => b.onclick = () => {
-        document.querySelectorAll('#subTabs button').forEach(t => t.classList.toggle('on', t === b));
-        $('pbC').classList.toggle('sel', b.dataset.p === 'c'); $('pbB').classList.toggle('sel', b.dataset.p === 'b'); b.blur();
-    });
     $('ruleAddP').onclick = () => $('ruleAdd').click();
-    $('bufMinus').onclick = (e) => { bufStep(-1); e.currentTarget.blur(); };
-    $('bufPlus').onclick = (e) => { bufStep(1); e.currentTarget.blur(); };
-    $('promptInput').value = opts.prompt;
-    $('promptInput').oninput = (e) => { opts.prompt = e.target.value; store.set('lpd_opts', opts); };
-    $('bufInput').value = opts.bufMs;
-    $('bufInput').oninput = (e) => { opts.bufMs = Math.max(0, parseInt(e.target.value) || 0); store.set('lpd_opts', opts); };
-    $('repoInput').value = opts.repo;
-    $('repoInput').oninput = (e) => { opts.repo = e.target.value; store.set('lpd_opts', opts); };
-    $('promptBInput').value = opts.promptB;
-    $('promptBInput').oninput = (e) => { opts.promptB = e.target.value; store.set('lpd_opts', opts); };
+
+    // prompts: read-only from the repo (config/prompt-categories.txt, config/prompt-bulletins.txt); GitHub is the master copy
+    const PSYNC = [['prompt', 'prompt-categories.txt'], ['promptB', 'prompt-bulletins.txt']];
+    let psyncAt = 0;
+    const normP = t => (t || '').replace(/\r\n/g, '\n').replace(/\s+$/, '');
+    function repoSlug() { return (opts.repo || DEFAULT_REPO).trim().replace(/^https?:\/\/(www\.)?github\.com\//i, '').replace(/\.git$/i, '').replace(/\/+$/, ''); }
+    function configBase() { const b = dataBase(); if (!b) return ''; return b.endsWith('/data/') ? b.slice(0, -5) + 'config/' : b; }
+    function psyncDot(state) { const b = $('newsRetry'); b.classList.remove('ok', 'run', 'off'); b.classList.add(state); }
+    async function fetchText(url, ms = 15000) {
+        const ac = new AbortController(); const t = setTimeout(() => ac.abort(), ms);
+        try { const r = await fetch(url, { credentials: 'omit', signal: ac.signal, cache: 'no-store' }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.text(); }
+        finally { clearTimeout(t); }
+    }
+    async function syncPrompts(manual) {
+        const base = configBase(); if (!base) { psyncDot('off'); return; }
+        if (!manual && Date.now() - psyncAt < 60000) return;
+        psyncAt = Date.now(); psyncDot('run');
+        let got = 0;
+        for (const [o, file] of PSYNC) { try { opts[o] = normP(await fetchText(`${base}${file}?t=${Date.now()}`)); got++; } catch (e) { /* keep the copy already on this device */ } }
+        if (got) store.set('lpd_opts', opts);
+        psyncDot(got === PSYNC.length ? 'ok' : 'off');
+    }
+    $('promptsLink').href = `https://github.com/${repoSlug()}/tree/main/config`;
+    setTimeout(() => syncPrompts(false), 0);
 
     // --- POPOVERS ---
     function closePops() { document.body.classList.remove('pop-open'); document.querySelectorAll('.pop').forEach(p => p.classList.remove('open')); $('gearBtn').classList.remove('on'); $('newsBtn').classList.remove('on'); $('rulesBtn').classList.remove('on'); }
@@ -1054,8 +1062,6 @@
     }
     $('gearBtn').onclick = (e) => { togglePop('gearPop', 'gearBtn'); e.currentTarget.blur(); };
     $('newsBtn').onclick = (e) => { if (togglePop('newsPop', 'newsBtn')) enterNews(); e.currentTarget.blur(); };
-    $('ledSlot').addEventListener('click', () => $('ledSlot').classList.toggle('pin'));
-    document.addEventListener('click', (e) => { if (!e.composedPath().includes($('ledSlot'))) $('ledSlot').classList.remove('pin'); });
     document.addEventListener('click', (e) => {
         const inside = e.composedPath().some(n => n.classList && (n.classList.contains('pop') || n.classList.contains('icon-btn')));
         if (!inside) closePops();
@@ -1153,7 +1159,7 @@
     const newsText = items => items.map((it, k) => `News ${k + 1}: ${(it.head || '').trim()}\n${it.paras.join('\n')}`).join('\n\n');
 
     function dataBase() {
-        let r = (opts.repo || '').trim();
+        let r = (opts.repo || DEFAULT_REPO).trim();
         if (!r) return '';
         r = r.replace(/^https?:\/\/(www\.)?github\.com\//i, '').replace(/\.git$/i, '').replace(/\/+$/, '');
         if (/^https?:\/\//i.test(r)) return r + '/';
@@ -1252,9 +1258,9 @@
         const b = e.target.closest('.chip'); if (!b) return;
         bulVer = parseInt(b.dataset.v); store.set('lpd_bulver', bulVer); renderChips(); showEntry();
     };
-    $('newsRetry').onclick = () => loadTab(true);
+    $('newsRetry').onclick = () => { loadTab(true); syncPrompts(true); };
     $('newsText').oninput = recount;
-    function enterNews() { renderChips(); loadTab(); }
+    function enterNews() { renderChips(); loadTab(); syncPrompts(false); }
 
     $('newsCopy').onclick = async () => {
         const body = $('newsText').value;
