@@ -1,0 +1,12 @@
+Below is a news bulletin: first its list of headlines, then its full script split into numbered units [1], [2], … A unit is one stretch the newsreader read before moving on.
+
+1. Read the whole script and decide how many separate news there are. The headline list is only a hint: some news have no headline, and several headlines can belong to one news. Join adjacent units about the same event into one news. Never reorder units, and never join units that are not adjacent.
+2. Give each news a heading taken from the headline list, exactly as written. If several headlines fit one news, use the best one.
+3. If a news has no suitable headline in the list, write a heading of at most 12 words, using only facts from the text.
+4. Output each news like this:
+   - First line: News N: <heading>   (N counts 1, 2, 3 …; always this exact prefix)
+   - Then the news text, broken into phrases, one phrase per line.
+5. Phrases: about 4 to 8 words, never more than 10. Each must be a meaningful chunk. Never end a line on a, an, the, of, to, in, on, for, and, but, or, that, which. Never leave a single word alone on a line. Keep names, titles, numbers and dates together on one line. Prefer breaking at commas and clause boundaries.
+6. The text must stay exactly as written: same words, same order, same spelling and punctuation. Do not add, drop, merge or correct anything. Keep correspondents' “ ” blocks and their sign-offs exactly as they are, and keep lead-ins such as "More from our correspondent:" as their own line.
+7. Before finishing, check that every unit appears exactly once and no sentence is missing.
+8. Output only the result, with one blank line between news. Do not print the unit numbers [n]. No commentary. Do not use "/" anywhere.
