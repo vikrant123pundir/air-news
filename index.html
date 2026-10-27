@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Lexical Precision Dictator - V63</title>
+    <title>Lexical Precision Dictator - V64</title>
     <style>
         :root { --grey: #94a3b8; --accent: #3b82f6; --bg: #050505; --card: #121212; --text: #fafafa; --yellow: #fbbf24; --red: #ef4444; --green: #10b981; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -81,7 +81,7 @@
         .sec { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8a8a; }
         .kgrid { display: grid; grid-template-columns: 50px repeat(3, minmax(0, 1fr)); gap: 6px 10px; align-items: center; }
         .kgrp { font-size: 0.7rem; font-weight: 700; color: var(--accent); }
-        #newsPop { width: min(600px, 96vw); }
+        #newsPop { width: min(760px, 96vw); }
         .pop-row { display: flex; gap: 6px; margin-bottom: 10px; align-items: center; }
         .pop-sec { font-size: 0.6rem; color: #666; text-transform: uppercase; font-weight: 700; margin: 4px 0 6px; letter-spacing: 0.05em; }
 
@@ -358,6 +358,28 @@
             body.phone .s2, body.phone .s3 { flex: 1 1 calc(50% - 4px); min-width: 0; }
             body.phone #gearPop .pop-close { order: 0; }
         }
+        /* ---- News menu on the laptop: fixed slots ---- */
+        body:not(.phone) #newsPop.open { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+        body:not(.phone) #newsPop .pop-row { margin: 0; align-items: center; gap: 8px; }
+        body:not(.phone) #newsChips { flex: 1; min-width: 0; margin: 0; gap: 8px; }
+        body:not(.phone) #bulChips { margin: 0; gap: 8px; }
+        body:not(.phone) #newsPop .chip { height: 36px; padding: 0 12px; font-size: 0.75rem; }
+        body:not(.phone) #verRow { display: flex; align-items: center; gap: 8px; padding-left: 12px; margin-left: 2px; border-left: 1px solid #2a2a2a; }
+        body:not(.phone) #verRow[style*="none"] { display: none; }
+        body:not(.phone) #newsRetry { flex: 0 0 40px; width: 40px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; }
+        body:not(.phone) #newsCopy { color: var(--accent); border-color: var(--accent); background: rgba(59,130,246,0.12); }
+        body:not(.phone) #newsText { height: 260px; }
+        body:not(.phone) .nfoot #pubStamp:empty { display: none; }
+        body:not(.phone) .nfoot #newsAt { margin-left: auto; width: 96px; box-sizing: border-box; text-align: center; padding: 6px 0; }
+        body:not(.phone) .nfoot #newsAt:empty::before { content: '··:··'; }
+        body:not(.phone) .nfoot #newsCount { width: 112px; box-sizing: border-box; text-align: center; padding: 6px 0; }
+        body:not(.phone) .nfoot #pubStamp { width: 150px; box-sizing: border-box; text-align: center; padding: 6px 0; }
+        /* phone: nothing changes; the new wrappers are flattened like the old ones */
+        body:not(.phone) .ntext { position: relative; }
+        body:not(.phone) #newsMsg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        body.phone #bulChips { display: none; }
+        body.phone #newsPop .ntext { display: contents; }
+        body.phone #newsPop .nfoot { display: contents; }
     </style>
 </head>
 <body>
@@ -508,19 +530,24 @@
 
             <div class="pop" id="newsPop">
                 <div class="pop-head"><button class="pop-close" aria-label="Close">&times;</button></div>
-                <div class="pop-row" style="align-items:flex-start; margin-bottom:8px;">
-                    <div class="chips" id="newsChips" style="flex:1; margin:0;"></div>
+                <div class="pop-row nrow1">
+                    <div class="chips" id="newsChips"></div>
                     <button class="mini" id="newsRetry" title="Reload"><svg class="ic" style="width:14px;height:14px"><use href="#i-reset"/></svg><i class="sdot"></i></button>
+                    <button class="icon-btn" id="newsCopy" style="flex:0 0 44px;height:36px;" title="Copy all"><svg class="ic"><use href="#i-copy"/></svg></button>
+                </div>
+                <div class="pop-row nrow2">
+                    <div class="chips" id="bulChips"></div>
+                    <div id="verRow" style="display:none;"><div class="chips" id="verChips" style="margin:0;"></div></div>
+                </div>
+                <div class="ntext">
+                    <div class="nmsg" id="newsMsg" style="display:none;"></div>
+                    <textarea class="pop-ta" id="newsText"></textarea>
+                </div>
+                <div class="pop-row nfoot">
+                    <span id="pubStamp"></span>
                     <span id="newsAt" title="Fetched at"></span>
                     <span id="newsCount">0 · 0 w</span>
-                    <button class="icon-btn" id="newsCopy" style="flex:0 0 38px;height:30px;" title="Copy all"><svg class="ic"><use href="#i-copy"/></svg></button>
                 </div>
-                <div class="pop-row" id="verRow" style="display:none; margin-bottom:8px;">
-                    <div class="chips" id="verChips" style="margin:0;"></div>
-                    <span id="pubStamp"></span>
-                </div>
-                <div class="nmsg" id="newsMsg" style="display:none;"></div>
-                <textarea class="pop-ta" id="newsText"></textarea>
             </div>
         </div>
     </div>
@@ -1231,7 +1258,7 @@
     async function loadTab(force) {
         const key = newsTab, c = newsCache[key];
         if (!force && c && c.day === istDay()) { showEntry(); return; }
-        $('newsText').value = ''; $('pubStamp').textContent = ''; $('newsAt').textContent = ''; recount(); showMsg('…');
+        $('newsText').value = ''; $('pubStamp').textContent = ''; $('newsAt').textContent = ''; recount(); showMsg('…'); if (!isPhone) $('newsCount').textContent = '– · – w';
         $('verRow').style.display = key.startsWith('bul:') ? '' : 'none';
         try {
             const entry = key.startsWith('cat:') ? await fetchCategory(parseInt(key.slice(4))) : await fetchBulletin(key.slice(4));
@@ -1247,13 +1274,15 @@
     function renderChips() {
         const c = CATS.map(([n, id]) => `<button class="chip${newsTab === 'cat:' + id ? ' on' : ''}" data-t="cat:${id}">${n}</button>`).join('');
         const b = BULS.map(([n, k]) => `<button class="chip bul${newsTab === 'bul:' + k ? ' on' : ''}" data-t="bul:${k}">${n}</button>`).join('');
-        $('newsChips').innerHTML = c + '<span class="sep"></span>' + b;
+        if (isPhone) $('newsChips').innerHTML = c + '<span class="sep"></span>' + b;
+        else { $('newsChips').innerHTML = c; $('bulChips').innerHTML = b; }
         $('verChips').innerHTML = ['Latest', 'Previous'].map((n, i) => `<button class="chip bul${bulVer === i ? ' on' : ''}" data-v="${i}">${n}</button>`).join('');
     }
-    $('newsChips').onclick = (e) => {
+    const chipClick = (e) => {
         const b = e.target.closest('.chip'); if (!b) return;
         newsTab = b.dataset.t; store.set('lpd_newstab', newsTab); renderChips(); loadTab();
     };
+    $('newsChips').onclick = chipClick; $('bulChips').onclick = chipClick;
     $('verChips').onclick = (e) => {
         const b = e.target.closest('.chip'); if (!b) return;
         bulVer = parseInt(b.dataset.v); store.set('lpd_bulver', bulVer); renderChips(); showEntry();
