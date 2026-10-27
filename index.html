@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Lexical Precision Dictator - V64</title>
+    <title>Lexical Precision Dictator - V65</title>
     <style>
         :root { --grey: #94a3b8; --accent: #3b82f6; --bg: #050505; --card: #121212; --text: #fafafa; --yellow: #fbbf24; --red: #ef4444; --green: #10b981; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -380,6 +380,29 @@
         body.phone #bulChips { display: none; }
         body.phone #newsPop .ntext { display: contents; }
         body.phone #newsPop .nfoot { display: contents; }
+        /* ---- laptop: five rows in any order; list and raw text share one area ---- */
+        body:not(.phone) { gap: 8px; padding: 10px 0; box-sizing: border-box; }
+        body:not(.phone) .header-controls, body:not(.phone) .wrapper { display: contents; }
+        body:not(.phone) .controls, body:not(.phone) .status-row, body:not(.phone) .display-box, body:not(.phone) .btns,
+        body:not(.phone) #dock, body:not(.phone) #textInput { width: min(900px, calc(100% - 24px)); margin-left: auto; margin-right: auto; box-sizing: border-box; flex-shrink: 0; }
+        body:not(.phone) #dock { flex: 1 1 0; min-height: 0; border: 1px solid #161616; border-radius: 10px; padding: 8px 12px; }
+        body:not(.phone) #textInput { display: none; }
+        body:not(.phone).raw-view #dock { display: none; }
+        body:not(.phone).raw-view #textInput { display: block; flex: 1 1 0; min-height: 0; height: auto; font-family: 'Monaco', monospace; font-size: 0.9rem; line-height: 1.6; padding: 12px 16px; }
+        body:not(.phone) .btns.up > .pop { top: auto; bottom: calc(100% + 6px); }
+        body:not(.phone) .display-box.up .led-legend { top: auto; bottom: 20px; }
+        #viewBtn.on { color: var(--accent); border-color: var(--accent); background: rgba(59,130,246,0.14); }
+        .flash { animation: areaflash 0.6s ease-out; }
+        @keyframes areaflash { from { box-shadow: 0 0 0 2px var(--accent); } to { box-shadow: 0 0 0 2px transparent; } }
+        #orderStrip { flex: 1; min-width: 0; display: flex; gap: 5px; }
+        .ochip { position: relative; flex: 1; min-width: 0; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px; background: #151515; border: 1px solid #2a2a2a; border-radius: 8px; color: #b5b5b5; cursor: grab; user-select: none; }
+        .ochip .ic { width: 18px; height: 18px; pointer-events: none; }
+        .ochip b { position: absolute; top: 2px; right: 5px; font: 700 9px 'Monaco', monospace; color: #777; pointer-events: none; }
+        .ochip .grip { width: 8px; height: 14px; color: #666; background: radial-gradient(circle, currentColor 1.3px, transparent 1.7px) 0 0 / 4px 5px; pointer-events: none; }
+        .ochip.lift { opacity: 0.4; border-color: var(--accent); }
+        .ochip.before::before, .ochip.after::after { content: ''; position: absolute; top: 3px; bottom: 3px; width: 3px; border-radius: 2px; background: var(--accent); }
+        .ochip.before::before { left: -4px; } .ochip.after::after { right: -4px; }
+        body.phone .layout-row, body.phone #viewBtn { display: none !important; }
     </style>
 </head>
 <body>
@@ -407,6 +430,13 @@
         <symbol id="i-skipf" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></symbol>
         <symbol id="i-paper" viewBox="0 0 24 24"><path d="M4 4h13v15a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2V4z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M7 8h7M7 12h7M7 16h4"/></symbol>
         <symbol id="i-repeat" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+        <symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></symbol>
+        <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+        <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+        <symbol id="i-type" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></symbol>
+        <symbol id="i-bars" viewBox="0 0 24 24"><rect x="3" y="9.5" width="18" height="5" rx="2.5"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4"/></symbol>
+        <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></symbol>
         <symbol id="i-up" viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></symbol>
         <symbol id="i-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
         <symbol id="i-bar" viewBox="0 0 24 24"><rect x="2" y="9" width="20" height="6" rx="3"/><rect x="2" y="9" width="12" height="6" rx="3" fill="currentColor"/></symbol>
@@ -469,6 +499,7 @@
             <button class="paste-btn" id="pasteBtn"><svg class="ic"><use href="#i-paste"/></svg><span id="pasteLbl">Paste</span></button>
             <button class="icon-btn" id="newsBtn" title="AIR news"><svg class="ic"><use href="#i-news"/></svg></button>
             <button class="icon-btn" id="rulesBtn" title="Find & replace rules"><span class="rx">.*</span></button>
+            <button class="icon-btn" id="viewBtn" title="List / raw text"><svg class="ic"><use href="#i-list"/></svg></button>
             <button class="icon-btn" id="gearBtn" title="Settings"><svg class="ic"><use href="#i-gear"/></svg></button>
             <button class="icon-btn" id="trashBtn" title="Clear all (Ctrl+Z restores)"><svg class="ic"><use href="#i-trash"/></svg></button>
             <div class="nav">
@@ -506,6 +537,11 @@
                         <div class="nbmid"><input type="number" id="bufInput" min="0" step="50" aria-label="Amber light after, in milliseconds"><span class="msu">ms</span></div>
                         <button class="bstep" id="bufPlus" aria-label="Plus 50 ms"><svg class="ic"><use href="#i-plus"/></svg></button>
                     </div>
+                </div>
+                <div class="srow layout-row">
+                    <span class="lead"><svg class="ic"><use href="#i-layout"/></svg></span>
+                    <div id="orderStrip"></div>
+                    <button class="bstep" id="orderReset" aria-label="Reset the order"><svg class="ic"><use href="#i-reset"/></svg></button>
                 </div>
                 <div class="srow prompts-row">
                     <span class="lead"><svg class="ic"><use href="#i-file"/></svg></span>
@@ -833,6 +869,7 @@
 
     function beginPlay() {
         isPaused = false; active = true; syncLive(); keepAwake(true); document.body.classList.remove('paused');
+        if (document.body.classList.contains('raw-view')) setRawView(false);
         $('pauseBtn').disabled = false;
         $('pauseBtn').textContent = "Pause";
         setEngineState(true);
@@ -998,7 +1035,7 @@
             return;
         }
         if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.code === 'KeyZ') {
-            if (!$('textInput').value && restoreTrash()) e.preventDefault();
+            if ((!$('textInput').value || (pasteUndo && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName))) && restoreTrash()) { pasteUndo = false; e.preventDefault(); }
             return;
         }
         if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -1076,15 +1113,93 @@
     $('promptsLink').href = `https://github.com/${repoSlug()}/tree/main/config`;
     setTimeout(() => syncPrompts(false), 0);
 
+    // --- ONE AREA FOR THE LIST AND THE RAW TEXT (laptop) ---
+    function setRawView(on) {
+        document.body.classList.toggle('raw-view', on); $('viewBtn').classList.toggle('on', on);
+        $('viewBtn').querySelector('use').setAttribute('href', on ? '#i-type' : '#i-list');
+        if (on) $('textInput').focus(); else if (document.activeElement === $('textInput')) $('textInput').blur();
+    }
+    $('viewBtn').onclick = (e) => { setRawView(!document.body.classList.contains('raw-view')); e.currentTarget.blur(); };
+    let pasteUndo = false;                                      // Ctrl+V in the list view replaces the whole text; Ctrl+Z brings the old text back
+    document.addEventListener('paste', (e) => {
+        if (isPhone || active || document.body.classList.contains('raw-view')) return;
+        const t = e.target;
+        if (t && t.closest && (t.closest('.pop') || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+        const txt = (e.clipboardData || window.clipboardData).getData('text'); if (!txt || !txt.trim()) return;
+        e.preventDefault();
+        const old = $('textInput').value; if (old) store.set('lpd_trash', { text: old });
+        $('textInput').value = txt; initialProcess(); updateUI(); pasteUndo = !!old;
+        const d = $('dock'); d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash');
+    });
+    $('textInput').addEventListener('input', () => { pasteUndo = false; });
+
+    // --- the two sliders also answer to the mouse wheel ---
+    document.querySelectorAll('.card').forEach(card => {
+        const r = card.querySelector('input[type=range]'); if (!r) return;
+        let acc = 0;
+        card.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            acc -= e.deltaMode === 1 ? e.deltaY * 40 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+            const n = Math.trunc(acc / 100); if (!n) return; acc -= n * 100;       // one mouse-wheel notch = one step
+            const st = parseFloat(r.step) || 1, cur = parseFloat(r.value);
+            const v = Math.min(parseFloat(r.max), Math.max(parseFloat(r.min), cur + n * st));
+            if (v === cur) return;
+            r.value = v; r.dispatchEvent(new Event('input')); r.dispatchEvent(new Event('change'));
+        }, { passive: false });
+    });
+
+    // --- LAYOUT: the five rows in any order (laptop) ---
+    const ROWS = { cards: ['.controls'], area: ['#dock', '#textInput'], prog: ['.status-row'], btns: ['.btns'], panel: ['.display-box'] };
+    const ROW_ICONS = { cards: 'sliders', area: 'list', prog: 'bars', btns: 'play', panel: 'panel' };
+    const DEFAULT_ORDER = ['cards', 'area', 'prog', 'btns', 'panel'];
+    let rowOrder = (() => { const o = store.get('lpd_order', null); return Array.isArray(o) && o.length === 5 && DEFAULT_ORDER.every(k => o.includes(k)) ? o : DEFAULT_ORDER.slice(); })();
+    function applyOrder() { if (isPhone) return; rowOrder.forEach((k, i) => ROWS[k].forEach(sel => { document.querySelector(sel).style.order = i; })); }
+    function renderOrder() {
+        $('orderStrip').innerHTML = rowOrder.map((k, i) => `<div class="ochip" draggable="true" data-k="${k}"><i class="grip"></i><svg class="ic"><use href="#i-${ROW_ICONS[k]}"/></svg><b>${i + 1}</b></div>`).join('');
+    }
+    let dragK = null;
+    const strip = $('orderStrip');
+    strip.addEventListener('dragstart', (e) => { const c = e.target.closest('.ochip'); if (!c) return; dragK = c.dataset.k; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', dragK); setTimeout(() => c.classList.add('lift'), 0); });
+    strip.addEventListener('dragend', () => { dragK = null; renderOrder(); });
+    strip.addEventListener('dragover', (e) => {
+        if (!dragK) return; e.preventDefault();
+        strip.querySelectorAll('.ochip').forEach(c => c.classList.remove('before', 'after'));
+        const c = e.target.closest('.ochip'); if (!c || c.dataset.k === dragK) return;
+        const r = c.getBoundingClientRect(); c.classList.add(e.clientX < r.left + r.width / 2 ? 'before' : 'after');
+    });
+    strip.addEventListener('drop', (e) => {
+        if (!dragK) return; e.preventDefault();
+        const c = e.target.closest('.ochip');
+        if (c && c.dataset.k !== dragK) {
+            const r = c.getBoundingClientRect(), arr = rowOrder.filter(k => k !== dragK);
+            arr.splice(arr.indexOf(c.dataset.k) + (e.clientX >= r.left + r.width / 2 ? 1 : 0), 0, dragK);
+            rowOrder = arr; store.set('lpd_order', rowOrder); applyOrder();
+        }
+        dragK = null; renderOrder();
+    });
+    $('orderReset').onclick = (e) => { rowOrder = DEFAULT_ORDER.slice(); store.set('lpd_order', rowOrder); applyOrder(); renderOrder(); e.currentTarget.blur(); };
+    applyOrder(); renderOrder();
+    window.addEventListener('resize', () => { if (!isPhone) setUp(); });
+    $('ledSlot').addEventListener('mouseenter', () => { $('ledSlot').closest('.display-box').classList.toggle('up', $('ledSlot').getBoundingClientRect().top > innerHeight / 2); });
+
     // --- POPOVERS ---
     function closePops() { document.body.classList.remove('pop-open'); document.querySelectorAll('.pop').forEach(p => p.classList.remove('open')); $('gearBtn').classList.remove('on'); $('newsBtn').classList.remove('on'); $('rulesBtn').classList.remove('on'); }
     // the settings panel opens under the buttons and never runs past the window: it scrolls inside itself
-    function fitPop() { const p = $('gearPop'); if (!p.classList.contains('open')) return; p.style.maxHeight = Math.max(160, innerHeight - p.getBoundingClientRect().top - 12) + 'px'; }
+    function fitPop() {
+        const p = $('gearPop'); if (!p.classList.contains('open')) return;
+        const bt = document.querySelector('.btns'), up = !isPhone && bt.classList.contains('up'), r = bt.getBoundingClientRect();
+        p.style.maxHeight = Math.max(160, up ? r.top - 18 : innerHeight - p.getBoundingClientRect().top - 12) + 'px';
+    }
+    function setUp() {                                         // laptop: menus open upward when the button row is in the lower half
+        if (isPhone) return;
+        const bt = document.querySelector('.btns'), r = bt.getBoundingClientRect();
+        bt.classList.toggle('up', r.top + r.height / 2 > innerHeight / 2);
+    }
     window.addEventListener('resize', fitPop);
     function togglePop(popId, btnId) {
         const open = $(popId).classList.contains('open');
         closePops();
-        if (!open) { $(popId).classList.add('open'); $(btnId).classList.add('on'); document.body.classList.add('pop-open'); if (popId === 'gearPop') fitPop(); }
+        if (!open) { setUp(); $(popId).classList.add('open'); $(btnId).classList.add('on'); document.body.classList.add('pop-open'); if (popId === 'gearPop') fitPop(); }
         return !open;
     }
     $('gearBtn').onclick = (e) => { togglePop('gearPop', 'gearBtn'); e.currentTarget.blur(); };
