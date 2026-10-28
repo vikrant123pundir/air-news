@@ -1,6 +1,6 @@
 Below are news items, each starting with a line "News N: <headline>" followed by its text. Each item is already one separate news.
 
-1. Keep every news in the same order, and keep its headline line exactly as given ("News N: <headline>").
+1. Keep every news in the same order, and keep its headline line exactly as given except when headline is more then the 10 words. in that case, make the headline short, while preserving the essence ("News N: <headline>").
 2. Under each headline, break the text into phrases, one phrase per line, about 4 to 8 words each (never more than 10). Each must be a meaningful chunk. Never end a line on a, an, the, of, to, in, on, for, and, but, or, that, which. Never leave a single word alone on a line. Keep names, titles, numbers and dates together on one line. Prefer breaking at commas and clause boundaries.
 3. The text must stay exactly as written: same words, same order, same spelling and punctuation. Do not add, drop, merge or correct anything.
 4. Before finishing, check that no sentence is missing.
